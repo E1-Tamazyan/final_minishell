@@ -3,42 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elen_t13 <elen_t13@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tumolabs <tumolabs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 16:47:41 by algaboya          #+#    #+#             */
-/*   Updated: 2024/12/30 17:04:54 by elen_t13         ###   ########.fr       */
+/*   Updated: 2025/01/19 21:16:55 by tumolabs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	exit_status = 0;
-
-void	set_exit_status(int status)
-{
-	exit_status = status;
-}
-
-int	get_exit_status(void)
-{
-	return (exit_status);
-}
-
 int	exit_statusik(char *arg)
 {
-	int		exit;
+	int		exitik;
 	long	num;
 
 	if (arg)
 	{
 		num = ft_atol(arg);
-		exit = num % 256;
-		if (exit < 0)
-			exit += 256;
-		return (exit);
+		exitik = num % 256;
+		if (exitik < 0)
+			exitik += 256;
+		set_exit_status(exitik);
+		return (exitik);
 	}
 	else
-		return (exit_status);
+		return (get_exit_status());
 }
 
 int	exit_builtin(t_shell *general)
@@ -53,7 +42,7 @@ int	exit_builtin(t_shell *general)
 		exit(exitik);
 	if (count > 3)
 		return (printf("minishell: exit: too many arguments\n"), FAILURE_EXIT);
-	exitik = exit_statusik(general->cmd_lst->args[1]);
+	set_exit_status(exit_statusik(general->cmd_lst->args[1]));
 	// free_general(general);
-	exit(exitik);
+	exit(get_exit_status());
 }

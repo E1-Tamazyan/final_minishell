@@ -6,7 +6,7 @@
 /*   By: elen_t13 <elen_t13@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 14:42:13 by etamazya          #+#    #+#             */
-/*   Updated: 2024/12/30 17:05:13 by elen_t13         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:05:03 by elen_t13         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,21 @@ int	main(int argc, char **argv, char **env)
 	char	*input;
 
 	input = NULL;
-	general = malloc(sizeof(t_shell));
+	general = (t_shell *)malloc(sizeof(t_shell));
 	check_malloc(general); 
 	if (argc == 1)
 	{
-		if (init_input(input, general, env)) // if 1 error
-			return (free(general), 1);
+		init_general(general);
+		create_env(env, general);
+		incr_shlvl(general);
+		if (init_input(input, general)) // if 1 error
+			return (free(general), get_exit_status());
 	}
-	return (free(general), 0);
+	free(general);
+	return (get_exit_status());
 }
+
+
+// check leaks
+// valgrind --leak-check=full ./your_program
+//  valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./minishell

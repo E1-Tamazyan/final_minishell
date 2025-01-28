@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checks.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elen_t13 <elen_t13@student.42.fr>          +#+  +:+       +#+        */
+/*   By: algaboya <algaboya@student.42yerevan.am    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:10 by elen_t13          #+#    #+#             */
-/*   Updated: 2025/01/23 14:51:28 by elen_t13         ###   ########.fr       */
+/*   Updated: 2025/01/27 04:23:55 by algaboya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,88 +17,90 @@
 // ************************
 // 4 function
 
-char* sgmnt_cpy(char* input, int* i)
+int check_cmd(char **env, t_shell *general)
 {
-	char	*key;
-	int		start;
-	int		len;
-	int		j;
-	
-	(*i)++;
-	start = *i;
-	if (input[*i] == '$' || input[*i] == '?' || input[*i] == '0')
+	// int		index;
+	// int		j;
+	t_token *tmp;
+
+	tmp = general->tok_lst;
+	(void)env;
+	while (tmp)
 	{
-		key = (char*)malloc(3 * sizeof(char));
-		if (key == NULL)
-			return NULL;
-		key[0] = '$';
-		key[1] = input[*i];
-		key[2] = '\0';
-		(*i)++;
-		return (key);
+		if (ft_strcmp((const char *)tmp->context, "env") == 0)
+			return (export_builtin(general, tmp->context), 0);
+		else if (ft_strcmp((const char *)tmp->context, "export") == 0)
+			return (export_builtin(general, tmp->context), 0); // 1 error
+		else if (ft_strcmp((const char *)tmp->context, "pwd") == 0)
+			return (pwd_builtin(general), 0);
+		else if (ft_strcmp((const char *)tmp->context, "cd") == 0)
+			return (cd_builtin(general), 0);
+		else if (ft_strcmp((const char *)tmp->context, "unset") == 0)
+			return (unset_builtin(general), 0);
+		// else if (ft_strcmp((const char *)tmp->context, "echo") == 0)
+		// 	return (echo_builtin(general), 0);
+		else if (ft_strcmp((const char *)tmp->context, "exit") == 0)
+			return (exit_builtin(general), 0);
+		tmp = tmp->next;
 	}
-	while (ft_isalnum(input[*i]) || input[*i] == '_')
-		(*i)++;
-	len = *i - start;
-	if (len == 0)
-		return NULL;
-	key = (char*)malloc((len + 1) * sizeof(char));
-	if (key == NULL)
-		return NULL;
+	return (0);
+}
+
+char *sgmnt_cpy(char *input, int *i)
+{
+	char *result;
+	int j;
+	int length;
+
+	length = 0;
+	// while (input[*i + length] && input[*i + length] != ' ' && input[*i + length] != '$' && input[*i + length] != '"')
+	while (input[*i + length] && input[*i + length] != ' ' && input[*i + length] != '"')
+		length++;
+	result = (char *)malloc((length + 1) * sizeof(char));
+	check_malloc(result);
 	j = 0;
-	while (j < len)
+	while (input[*i] && input[*i] != ' ' && input[*i] != '$' && input[*i] != '\"' && input[*i] != '\'')
 	{
-		key[j] = input[start + j];
-		j++;	
+		result[j++] = input[*i];
+		(*i)++;
 	}
-	key[len] = '\0';
-	return (key);
+	result[j] = '\0';
+	return (result);
 }
+// echo ba"rev $USER$USER jan" vonc es
 
-char *get_pid(void)
+char *open_dollar(t_shell *general, char *input, int *i, int start)
 {
-	char	*name;
-	pid_t	pid;
-	int		status;
-	
-	pid = fork();
-	if (pid == 0)
-		exit(0);
-	else
-	{
-		wait(&status);
-		name = ft_itoa((int)pid - 1);
-	}
-	return (name);
-}
-
-int	open_dollar(t_shell *general, char *input, int *i, int start)
-{
-	general->doll_lst = (t_dollar *)malloc(sizeof(t_dollar)); // changed this line here
 	(void)start;
 	if (input[*i] && input[*i] == '$')
-	{
-		general->doll_lst->u_key = sgmnt_cpy(input, i);
-		if (general->doll_lst->u_key == NULL)
-			general->doll_lst->value = NULL;
-		else if (!general->doll_lst->u_key[0])
+	{		
+		(*i)++;
+		if (input[*i] == '?' && input[*i + 1])
 		{
+				general->doll_lst->value = ft_itoa(get_exit_status());
+				printf("____%s____\n", general->doll_lst->value);
+				}
+				printf("AFTER\n");
+		general->doll_lst->u_key = sgmnt_cpy(input, i);
+		printf("c = ____%c\n____", input[*i]);
+		if (!general->doll_lst->u_key[0])
+		{	
 			general->doll_lst->value = (char *)malloc(sizeof(char) * 2);
 			check_malloc(general->doll_lst->value);
 			general->doll_lst->value[0] = '$'; 
-			general->doll_lst->value[1] = '\0';
+			general->doll_lst->value[1] = '\0'; 
 		}
 		else
 			general->doll_lst->value = check_env_var(general->env_lst, general->doll_lst->u_key);
 		if (!general->doll_lst->value)
-		{
+		{	
 			general->doll_lst->value = (char *)malloc(sizeof(char) * 1);
 			check_malloc(general->doll_lst->value);
 			general->doll_lst->value[0] = '\0'; 
 		}
 	}
-	return (1);
-} // echo ba"rev $USER$USER jan" vonc es
+	return (general->doll_lst->value);
+}
 
 int check_inp_quotes(t_shell *general, char *input, int i, int start)
 {
@@ -126,7 +128,5 @@ int check_inp_quotes(t_shell *general, char *input, int i, int start)
 
 // should make 3 tokens
 // echo ba"rev $USER' $USERecho ba"rev
-// $USER' $USER 'jan"$USER"
+// $USER' $USER 'jan"$USER
 // dff -a | $$
-
-// echo ba"rev $USER' $USERecho ba"rev $USER' $USER 'jan"$USER"

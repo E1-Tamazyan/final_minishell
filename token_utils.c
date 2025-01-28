@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elen_t13 <elen_t13@student.42.fr>          +#+  +:+       +#+        */
+/*   By: algaboya <algaboya@student.42yerevan.am    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 16:18:12 by etamazya          #+#    #+#             */
-/*   Updated: 2025/01/18 20:15:41 by elen_t13         ###   ########.fr       */
+/*   Updated: 2024/12/25 18:38:32 by algaboya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,21 +67,26 @@ void	add_token_list(t_token **list, char *content, t_ttype type)
 	while (last && last->next)
 		last = last->next;
 	last->next = new;
+	// if (content)
+	// 	free(content);
 }
 
 t_token	*create_token(char *value, t_ttype type)
 {
-	int		j;
+	// int		j;
 	t_token	*new;
 
-	j = ft_strlen(value);
+	// j = ft_strlen(value);
 	new = (t_token *)malloc(sizeof(t_token));
 	check_malloc(new);
-	new->context = my_substr(value, 0, j);
+	new->context = value;
+	
+	// new->context = my_substr(value, 0, j);
 	new->type = type;
 	new->next = NULL;
 	return (new);
 }
+
 int	check_sgl_quote(char *input, int *i)
 {
 	if (input[*i] == '\'')

@@ -3,19 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lib_utils_1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elen_t13 <elen_t13@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tumolabs <tumolabs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 16:11:43 by etamazya          #+#    #+#             */
-/*   Updated: 2025/01/17 11:06:28 by elen_t13         ###   ########.fr       */
+/*   Updated: 2025/01/18 19:13:13 by tumolabs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// 5
-// ******************
-// ****** FULL ******
-// ******************
+//  5 functions
 
 int	ft_strlen(const char *str)
 {
@@ -105,6 +102,7 @@ char	*ft_strdup(const char *s1)
 	i = 0;
 	s1_dup = (char *)malloc(ft_strlen(s1) + 1);
 	check_malloc(s1_dup);
+	// write(1,"DUP\n",4);
 	while (s1[i] != '\0')
 	{
 		s1_dup[i] = s1[i];

@@ -1,7 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   remove_extra.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: algaboya <algaboya@student.42yerevan.am    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/26 22:48:10 by algaboya          #+#    #+#             */
+/*   Updated: 2025/01/26 22:48:22 by algaboya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
-//  e'ch'o "barev '$USER onc "es" fd' janvonc s ad "
 static char *remove_quoted_positions(char *str, int *indexes, int index_count, int len)
 {
 	int i;

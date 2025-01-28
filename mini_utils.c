@@ -17,7 +17,6 @@
 // ************************
 
 //5 ->6 functions already
-// dunno why 9 function
 
 int	put_key(t_env *node, char	*src)
 {
@@ -78,6 +77,8 @@ void	clean_list(t_token **list)
 	while (temp != NULL)
 	{
 		next = temp->next;
+		free(temp->context);
+		temp->context = NULL;
 		free(temp);
 		temp = next;
 	}
@@ -92,13 +93,11 @@ void	print_tokens(t_token *head)
 	t_token *current; 
 
 	current = head;
-	printf("****\n");
 	while (current != NULL)
 	{
 		printf("context: %s\n type: %d\n", current->context, current->type);
 		current = current->next;
 	}
-	printf("****\n");
 } 
 
 int	print_export(char *new)
@@ -106,6 +105,7 @@ int	print_export(char *new)
 	int		j;
 
 	j = 0;
+	// printf("sxtorik\n");
 	printf("declare -x ");
 	while (new[j++] != '=')
 	{
@@ -114,7 +114,13 @@ int	print_export(char *new)
 		j++;
 	}
 	if (new[j] == '\0')
-		return (write(1, "\n", 1), 1);
+	{
+		// if (k == 0)
+			printf("\n");
+		// else
+		// 	printf("=\n");
+		return (1);
+	}
 	printf("=\"");
 	j--;
 	while (new[j++] != '\0')
@@ -180,32 +186,27 @@ t_env	*bubble_sort_lst(t_env *lst)
 void	print_env(t_env *new, int flag)
 {
 	t_env *lst = bubble_sort_lst(new);
-
+	// dprintf(2,"print\n");
 	while (lst != NULL)
 	{
 		if (flag == 1)
 		{
-			// check here if (lst->is_print == 1)
-			// {
-				if (lst -> value == NULL)
-					printf("declare -x %s\n", lst -> key);
-				else
-					printf("declare -x %s=\"%s\"\n", lst -> key, lst -> value);
-			// }
+			if (lst -> value == NULL)
+				printf("declare -x %s\n", lst -> key);
+			else
+				printf("declare -x %s=\"%s\"\n", lst -> key, lst -> value);
 		}
 		else
 		{
-			// check here if (lst->is_print == 1)
-			// {
-				if (lst -> value == NULL)
-					printf("%s\n", lst -> key);
-				else
-					printf("%s=%s\n", lst -> key, lst -> value);
-			// }
+			if (lst -> value == NULL)
+				printf("%s\n", lst -> key);
+			else
+				printf("%s=%s\n", lst -> key, lst -> value);
 		}
 		lst = lst->next;
 	}
 }
+
 
 // ************************
 // ******* FUR MICH *******

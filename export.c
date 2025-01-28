@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elen_t13 <elen_t13@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tumolabs <tumolabs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 16:35:06 by algaboya          #+#    #+#             */
-/*   Updated: 2024/12/29 17:14:39 by elen_t13         ###   ########.fr       */
+/*   Updated: 2025/01/20 21:43:42 by tumolabs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,48 +15,51 @@
 int	export_builtin(t_shell *general, char *command)
 {
 	int	i;
-
-	if (ft_strcmp(command, "env") == 0 && !general->tok_lst->next)
+	int	j;
+	// dprintf(2, "export\n");
+	j = 1;
+	if (ft_strcmp(command, "env") == 0 && !general->cmd_lst->args[1])
+		return (print_env(general->sorted_env_lst, 0), EXIT_SUCCESS);
+	if (ft_strcmp(command, "export") == 0 && !general->cmd_lst->args[1])
+		return (print_env(general->env_lst, 1), EXIT_SUCCESS);
+	while (general->cmd_lst->args[j])
 	{
-		// printf("sxtor\n");
-		return (print_env(general->sorted_env_lst, 0), 0);
+		if (export_valid(general->cmd_lst->args[j]) == FAILURE_EXIT)
+		{
+			if (!general->cmd_lst->args[j + 1])
+				return (FAILURE_EXIT);
+			else
+				j++;
+		}
+		if (ft_strchr(general->cmd_lst->args[j], '=') >= 0)
+		{
+			i = ft_strchr(general->cmd_lst->args[j], '=');
+			add_env_lst_var(general->cmd_lst->args[j], general, i);
+		}
+		else
+			add_env_no_var(general->cmd_lst->args[j], general);
+		j++;
 	}
-	if (ft_strcmp(command, "export") == 0 && !general->tok_lst->next)
-	{
-		// printf("sxtor\n");
-		return (print_env(general->env_lst, 1), 0);
-	}
-	if (export_valid(general->tok_lst->next) == FAILURE_EXIT)
-	{
-		printf("val err\n");
-		return (FAILURE_EXIT);
-	}
-	else if (ft_strchr(general->tok_lst->next->context, '=') >= 0)
-	{
-		i = ft_strchr(general->tok_lst->next->context, '=');
-		add_env_lst_var(*general->tok_lst->next, general, i);
-	}
-	else
-		add_env_no_var(general->tok_lst->next->context, general);
-	return (SUCCESS_EXIT);
+	return (EXIT_SUCCESS);
 }
 
-int	export_valid(t_token *token_list)
+int	export_valid(char *arg)
 {
-	int	exit_status;
+	int	i;
 
-	exit_status = 0;
-	while (token_list)
+	i = 0;
+	while (arg[i])
 	{
-		if (!ft_isalpha(token_list->context[0])
-			|| ft_isdigit(token_list->context[0]))
+		if (!ft_isalpha(arg[0])
+			|| ft_isdigit(arg[0]))
 		{
-			error_message(token_list->context);
-			exit_status = 1;
+			printf("ERROR\n");
+			error_message(arg);
+			return (FAILURE_EXIT);
 		}
-		token_list = token_list->next;
+		i++;
 	}
-	return (exit_status);
+	return (SUCCESS_EXIT);
 }
 
 t_env	**add_env_no_var(char *context, t_shell *general)
@@ -76,10 +79,10 @@ t_env	**add_env_no_var(char *context, t_shell *general)
 	}
 	lol = my_lstnew(context, NULL);
 	ft_lstadd_back(general->env_lst, lol);
-	return (NULL);
+	return (EXIT_SUCCESS);
 }
 
-t_env	**add_env_lst_var(t_token cur_node, t_shell *general, int i)
+t_env	**add_env_lst_var(char *context, t_shell *general, int i)
 {
 	char	*val;
 	char	*key;
@@ -87,8 +90,8 @@ t_env	**add_env_lst_var(t_token cur_node, t_shell *general, int i)
 	t_env	*lol;
 
 	tmp = general->env_lst;
-	key = my_substr(cur_node.context, 0, i);
-	val = my_substr(cur_node.context, i + 1, ft_strlen(cur_node.context) - i);
+	key = my_substr(context, 0, i);
+	val = my_substr(context, i + 1, ft_strlen(context) - i);
 	while (tmp)
 	{
 		if (ft_strcmp(tmp->key, key) == 0)
@@ -105,7 +108,7 @@ t_env	**add_env_lst_var(t_token cur_node, t_shell *general, int i)
 		return (NULL);
 	ft_lstadd_back(general->env_lst, lol);
 	ft_lstadd_back(general->sorted_env_lst, lol);
-	return (NULL);
+	return (EXIT_SUCCESS);
 }
 
 char	**list_to_array(t_env *env)
@@ -126,7 +129,7 @@ char	**list_to_array(t_env *env)
 	{
 		tmp = str_join(env_temp->key, "=");
 		str[i] = str_join(tmp, env_temp->value);
-		free(tmp);
+		free_set_null(tmp);
 		if (!str[i])
 			return (free_array(str), NULL);
 		i++;
