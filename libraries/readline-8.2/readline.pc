@@ -1,4 +1,4 @@
-prefix=/Users/tumolabs/Desktop/final_minishell/libraries/readline
+prefix=/home/elen_t13/projects/final_minishell/libraries/readline
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include

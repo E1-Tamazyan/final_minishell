@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checks.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: algaboya <algaboya@student.42yerevan.am    +#+  +:+       +#+        */
+/*   By: elen_t13 <elen_t13@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:18:10 by elen_t13          #+#    #+#             */
-/*   Updated: 2025/01/27 04:23:55 by algaboya         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:45:25 by elen_t13         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,8 @@ char *open_dollar(t_shell *general, char *input, int *i, int start)
 		if (input[*i] == '?' && input[*i + 1])
 		{
 				general->doll_lst->value = ft_itoa(get_exit_status());
-				printf("____%s____\n", general->doll_lst->value);
-				}
-				printf("AFTER\n");
+		}
 		general->doll_lst->u_key = sgmnt_cpy(input, i);
-		printf("c = ____%c\n____", input[*i]);
 		if (!general->doll_lst->u_key[0])
 		{	
 			general->doll_lst->value = (char *)malloc(sizeof(char) * 2);
