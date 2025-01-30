@@ -1,5 +1,10 @@
-fsf
-barev
-barev
-smth << text
-text
+sdf
+fsd
+fsd
+hello
+hello
+ls << barev << hello
+fdsfs
+fsdf
+sd
+f

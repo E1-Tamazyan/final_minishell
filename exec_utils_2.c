@@ -71,13 +71,13 @@ void    clean_gen_exit(t_shell *general, int number, int flag, int exitik)
     // write(2, "command not found\n", 20);
     // if (flag == 1)
     //     dprintf(2, "%s: command not found\n", general->cmd_lst->cmd);
-    free_cmd_lst(&general->cmd_lst);
+    // free_cmd_lst(&general->cmd_lst);
     free_env_lst(general->env_lst);
     free_env_lst(general->sorted_env_lst);
     // free_doll_lst(general->doll_lst);
     
     // general->doll_lst = NULL;
-    general->cmd_lst = NULL;
+    // general->cmd_lst = NULL;
     general->env_lst = NULL;
     general->sorted_env_lst = NULL;
     // system("leaks minishell");

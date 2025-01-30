@@ -99,7 +99,7 @@ int    exec_one_cmd(t_shell *general, t_cmd_lst *tmp_cmd_lst)
 		redir_dups(tmp_cmd_lst);
         do_builtin(general, tmp_cmd_lst);
 	}
-    else
+    else if (tmp_cmd_lst->cmd)
     {
         init_signal(2);
         general->cmd_lst->pid = fork();
@@ -114,6 +114,7 @@ int    exec_one_cmd(t_shell *general, t_cmd_lst *tmp_cmd_lst)
         else
             perror("fork");
     }
+    printf("in exec\n");
     return (get_exit_status());
 }
 
@@ -234,7 +235,7 @@ void    split_and_run(t_shell *general, t_cmd_lst *tmp_cmd_lst)
         mini_error(tmp_cmd_lst->cmd, 2);
         general->exit_status = 1;
         free_set_null(path);
-        free_cmd_lst(&general->cmd_lst);
+        // free_cmd_lst(&general->cmd_lst);
         // free_fd_array(general->fd);
         clean_gen_exit(general, 127, 1, 1);
     }

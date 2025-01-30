@@ -155,7 +155,7 @@ void	ctrl_c(int sig);
 void	back_slash(int sig);
 void	sig_handler_hdoc(int sig);
 void 	init_signal(int mode);
-
+void	print_cmd(t_cmd_lst	*cmd_lst);
 void	expand_var(char **input, t_shell *general, int *start, int *i);
 char	*countcpy_len(char *input, int start, int *l, t_shell *general);
 int		spec_len(char *input, int start);
@@ -166,7 +166,7 @@ void	init_general(t_shell *general);
 int		init_input(char *input, t_shell *gen);
 int		check_cmd(char **env, t_shell *general);
 t_env	*init_env_nodes(char **env);
-
+void	clean_list(t_token **list);
 
 // ***____env_sorting_____***
 char	**sort_env(char **env);

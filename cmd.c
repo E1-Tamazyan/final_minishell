@@ -84,7 +84,7 @@ int create_cmd_lst(t_shell *g) // curr_cmd printable
 	int			i;
 
 
-	printf("create_cmd_lst\n");
+	// printf("create_cmd_lst\n");
 	g->pipe_count = count_commands(g->tok_lst) - 1;
 	i = 0;
 	g->cmd_lst = initialize_new_cmd();

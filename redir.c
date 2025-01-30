@@ -17,14 +17,11 @@ int heredoc_init(t_shell *g, t_cmd_lst **cmd, t_token *tok)
 {
 	(void)g;
 	(void)cmd;
-	// if(tok)
-	// {
 		if ((*cmd)->heredoc == NULL)
 		{
 			(*cmd)->heredoc = ft_strdup(tok->context);
 			check_malloc((*cmd)->heredoc);	
 		}
-	// }
 	return (0);
 }
 static void	execute_heredoc(t_shell *g, t_cmd_lst *cmd)
@@ -49,7 +46,6 @@ static void	execute_heredoc(t_shell *g, t_cmd_lst *cmd)
 			free(input);
 			break ;
 		}
-		// if (cmd->type)
 		write(fd, input, ft_strlen(input));
 		write(fd, "\n", 1);
 		free(input);

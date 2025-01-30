@@ -25,3 +25,30 @@ void	printStrings(char **strs)
 		i++;
 	}
 }
+
+void	print_cmd(t_cmd_lst	*cmd_lst)
+{
+	t_cmd_lst *temp;
+	
+	temp = cmd_lst;
+	printf("----\n");
+	while (temp)
+	{
+		printf("Command: %s\n", temp->cmd);
+		printf("Arguments:");
+		int i = 0;
+		while(temp->args && temp->args[i])
+		{
+			printf("%s ", temp->args[i]);
+			i++;
+		}
+		// if(temp->args)
+		// {	
+		// for (int i = 0; temp->args[i]; i++)
+			// printf("%s ", temp->args[i]);
+		// }
+		printf("\n");
+		temp = temp->next;
+	}
+	printf("----\n");
+}

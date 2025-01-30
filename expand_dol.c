@@ -74,33 +74,62 @@ char *countcpy_len(char *input, int start, int *l, t_shell *general)
 //     return (status_str);
 // }
 
+
 int	check_cut_quotes(t_shell *general, char **input, int *i, int start)
 {
 	if (check_inp_quotes(general, *input, *i, start) == -1)
 		return (-1);
-	while ((*input)[*i])
+	while (input[0][*i])
 	{
-		if (!general->sg_quote && (*input)[*i] == '\"')
+		if (!general->sg_quote && input[0][*i] == '\"')
 			general->db_quote = !general->db_quote;
-		else if (!general->db_quote && (*input)[*i] == '\'')
+		else if (!general->db_quote && input[0][*i] == '\'')
 			general->sg_quote = !general->sg_quote;
-		else if ((*input)[*i] == '$' && !general->sg_quote)
+		else if (input[0][*i] == '$' && !general->sg_quote)
 		{
-			open_dollar(general, *input, i, start);
+			// segfault $? $$ $0 again, new one, dunno why look later
+			// echo ba"rev $USER' $USERecho ba"rev $USER' $USER 'jan"$USER"
+			open_dollar(general, input[0], i, start);
 			expand_var(input, general, &start, i);
-			(--*i); //check this , do it only when after dollar comes $
 		}
-		else if (((*input)[*i] == ' ' || (*input)[*i] == '|' || (*input)[*i] == '>' || (*input)[*i] == '<') && !general->db_quote && !general->sg_quote)
-		{
-			if ((*input)[*i] == ' ')
-				return (add_token_list(&general->tok_lst, my_substr(*input, start, (*i - start)), 0), 0);
-			*i = init_op_token(*input, i, &general->tok_lst);
-		}
-		(*i)++;
+		else if ((input[0][*i] == ' ' || input[0][*i] == '|' || input[0][*i] == '>' || input[0][*i] == '<') && !general->db_quote && !general->sg_quote)
+			return (add_token_list(&general->tok_lst, my_substr(*input, start, (*i - start)), 0), 0);
+		if (input[0][(*i)])
+			(*i)++;
 	}
 	add_token_list(&general->tok_lst, my_substr(*input, start, (*i - start)), 0);
-	return (EXIT_SUCCESS);
-}
+	return (0);
+} // echo ba"rev $USER jan" vonc es
+
+
+// int	check_cut_quotes(t_shell *general, char **input, int *i, int start)
+// {
+// 	if (check_inp_quotes(general, *input, *i, start) == -1)
+// 		return (-1);
+// 	while ((*input)[*i])
+// 	{
+// 		if (!general->sg_quote && (*input)[*i] == '\"')
+// 			general->db_quote = !general->db_quote;
+// 		else if (!general->db_quote && (*input)[*i] == '\'')
+// 			general->sg_quote = !general->sg_quote;
+// 		else if ((*input)[*i] == '$' && !general->sg_quote)
+// 		{
+// 			open_dollar(general, *input, i, start);
+// 			expand_var(input, general, &start, i);
+// 			(--*i); //check this , do it only when after dollar comes $
+// 		}
+// 		else if (((*input)[*i] == ' ' || (*input)[*i] == '|' || (*input)[*i] == '>'
+// 			|| (*input)[*i] == '<') && !general->db_quote && !general->sg_quote)
+// 		{
+// 			if ((*input)[*i] == ' ')
+// 				return (add_token_list(&general->tok_lst, my_substr(*input, start, (*i - start)), 0), 0);
+// 			*i = init_op_token(*input, i, &general->tok_lst);
+// 		}
+// 		(*i)++;
+// 	}
+// 	add_token_list(&general->tok_lst, my_substr(*input, start, (*i - start)), 0);
+// 	return (EXIT_SUCCESS);
+// }
 
 // char *only_for_dol_harcakan(t_shell *general)
 // {
