@@ -150,6 +150,11 @@ void	ft_strcpy_2(char *s1, const char *s2, int start, int len);
 // char	*ft_strjoin(char *s1, char *s2);
 void	*ft_calloc(size_t count, size_t size);
 void	*ft_memset(void *str, int c, size_t n);
+void	restore_prompt(int sig);
+void	ctrl_c(int sig);
+void	back_slash(int sig);
+void	sig_handler_hdoc(int sig);
+void 	init_signal(int mode);
 
 void	expand_var(char **input, t_shell *general, int *start, int *i);
 char	*countcpy_len(char *input, int start, int *l, t_shell *general);

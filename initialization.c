@@ -97,6 +97,7 @@ int	init_tokens_cmds(char *input, t_shell *general, int i)
 		if (flag >= 0 && input[i] && (input[i] == '|' || input[i] == '>'
 			|| input[i] == '<' || input[i] == ' '))
 				flag = init_op_token(input, &i, &general->tok_lst);
+
 		else
 		{
 			start = i;
@@ -114,6 +115,7 @@ int	init_tokens_cmds(char *input, t_shell *general, int i)
 		if (input[i])
 			i++;
 	}
+	printf("sss = %s\n", general->tok_lst->context);
 	general->tok_lst = remove_extra_quotes(general);
 	check_heredoc_limit(general);
 	create_cmd_lst(general);
@@ -123,8 +125,8 @@ int	init_tokens_cmds(char *input, t_shell *general, int i)
 
 int init_op_token(char *input, int *i, t_token **token_list)
 {
-	if (!input || !token_list || !*token_list)
-		return -1;
+	if (!input || !token_list)
+		return (-1);
 	if (input[*i] && input[*i] == '|')
 	{
 		if (!input[*i + 1] || (input[*i + 1] != '|' && !input[*i + 2])) // Handle syntax error
