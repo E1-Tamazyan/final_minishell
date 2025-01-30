@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/tumolabs/Desktop/final_minishell",
+      "program": "/Users/tumolabs/Desktop/final_minishell/build/Debug/outDebug"
+    }
+  ]
+}

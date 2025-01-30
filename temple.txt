@@ -1,3 +1,5 @@
-
-
-
+fsf
+barev
+barev
+smth << text
+text
